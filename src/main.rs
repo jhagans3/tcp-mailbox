@@ -17,8 +17,8 @@ fn main() {
     let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
     let storage = Arc::new(Mutex::new(VecDeque::new()));
 
-    for connection_attepmt in listener.incoming() {
-        match connection_attepmt {
+    for connection_attempt in listener.incoming() {
+        match connection_attempt {
             Ok(stream) => {
                 let thread_handle = Arc::clone(&storage); //storage.clone();
                 std::thread::spawn(move || {
@@ -43,7 +43,7 @@ fn handle_client(mut stream: TcpStream, storage: &Mutex<VecDeque<String>>) {
             println!("publishing message")
         }
         Request::Retrieve => {
-            // let mut guard = storage.lock().unwrap(); 
+            // let mut guard = storage.lock().unwrap();
             // guard lives after match, not needed that long
             let maybe_msg = storage.lock().unwrap().pop_front();
             match maybe_msg {
